@@ -165,7 +165,7 @@ def list_resources():
         if idVendor == 0x0957 and idProduct == 0x4218:
             # Agilent U2722A firmware update mode
             idProduct = 0x4118
-        
+
         if idVendor == 0x0957 and idProduct == 0x4418:
             # Agilent U2723A firmware update mode
             idProduct = 0x4318
@@ -202,7 +202,7 @@ def find_device(idVendor=None, idProduct=None, iSerial=None):
             # Agilent U2701A/U2702A firmware update mode
             if dev.idVendor == idVendor and dev.idProduct == 0x2818:
                 found = True
-        
+
         if idVendor == 0x0957 and idProduct == 0x4118:
             # Agilent U2722A firmware update mode
             if dev.idVendor == idVendor and dev.idProduct == 0x4218:
@@ -365,7 +365,7 @@ class Instrument(object):
             # U2701A/U2702A boot 0x2818, usbtmc 0x2918
             # U2722A boot 0x4218, usbtmc 0x4118
             # U2723A boot 0x4418, usbtmc 0x4318
- 
+
             serial = self.device.serial_number
 
             new_id = 0
@@ -680,7 +680,7 @@ class Instrument(object):
                 if self.rigol_quirk and read_data:
                     pass # do nothing, the packet has no header if it isn't the first
                 else:
-                    msgid, btag, btaginverse, transfer_size, transfer_attributes, data = self.unpack_dev_dep_resp_header(resp) 
+                    msgid, btag, btaginverse, transfer_size, transfer_attributes, data = self.unpack_dev_dep_resp_header(resp)
 
 
                 if self.rigol_quirk:
@@ -854,6 +854,9 @@ class Instrument(object):
                 )
                 time.sleep(0.1)
                 if (b[0] != USBTMC_STATUS_PENDING):
+                    time.sleep(0.1)
+                    break
+                else:
                     break
             # Clear halt condition
             self.bulk_out_ep.clear_halt()
@@ -892,6 +895,8 @@ class Instrument(object):
                 )
                 time.sleep(0.1)
                 if (b[0] != USBTMC_STATUS_PENDING):
+                    time.sleep(0.1)
+                else:
                     break
         else:
             # no transfer in progress; nothing to do
@@ -929,6 +934,8 @@ class Instrument(object):
                 )
                 time.sleep(0.1)
                 if (b[0] != USBTMC_STATUS_PENDING):
+                    time.sleep(0.1)
+                else:
                     break
         else:
             # no transfer in progress; nothing to do
